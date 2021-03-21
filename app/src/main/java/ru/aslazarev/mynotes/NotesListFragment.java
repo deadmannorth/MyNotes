@@ -1,11 +1,14 @@
 package ru.aslazarev.mynotes;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +22,17 @@ import static ru.aslazarev.mynotes.MainActivity.notes;
 
 public class NotesListFragment extends Fragment {
 
+    public static final String CURRENT_NOTE = "current.note";
+    private Note currentNote;
+
+    private boolean isLandscape;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState){
+        outState.putParcelable(CURRENT_NOTE, currentNote);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,20 +62,57 @@ public class NotesListFragment extends Fragment {
             noteLayout.addView(noteDate);
             final int index = i;
             noteLayout.setOnClickListener(v -> {
-                showNoteFragment(index);
+                currentNote = notes.get(index);
+                showFragment(currentNote);
             });
             layoutView.addView(noteLayout);
         }
 
     }
 
-    private void showNoteFragment(int index) {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        if(savedInstanceState != null){
+            currentNote = savedInstanceState.getParcelable(CURRENT_NOTE);
+        } else {
+            currentNote = notes.get(0);
+        }
+        if (isLandscape) {
+            showNoteFragmentLand(currentNote);
+        }
+
+
+    }
+
+    private void showFragment(Note note) {
+        if (isLandscape) {
+            showNoteFragmentLand(note);
+        } else {
+            showNoteFragment(note);
+        }
+
+    }
+
+    private void showNoteFragmentLand(Note note) {
+        NoteFragment fragment = NoteFragment.newInstance(currentNote);
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.land_note_content, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.commit();
+
+    }
+
+
+
+    private void showNoteFragment(Note note) {
         Intent intent = new Intent();
         intent.setClass(getActivity(), NoteFragmentActivity.class);
-        intent.putExtra(NoteFragment.ARG_INDEX, index);
+        intent.putExtra(NoteFragment.ARG_INDEX, currentNote);
         startActivity(intent);
-
-
     }
 
 }

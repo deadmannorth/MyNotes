@@ -19,13 +19,13 @@ import java.text.SimpleDateFormat;
 public class NoteFragment extends Fragment {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
-    public static final String ARG_INDEX = "index";
-    private int index;
+    public static final String ARG_INDEX = "note";
+    private Note note;
 
-    public static NoteFragment newInstance(int index) {
+    public static NoteFragment newInstance(Note note) {
         NoteFragment fragment = new NoteFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_INDEX, index);
+        args.putParcelable(ARG_INDEX, note);
         fragment.setArguments(args);
         return fragment;
     }
@@ -34,7 +34,7 @@ public class NoteFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            index = getArguments().getInt(ARG_INDEX);
+            note = getArguments().getParcelable(ARG_INDEX);
         }
     }
 
@@ -43,7 +43,7 @@ public class NoteFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_note, container, false);
-        Note noteF = MainActivity.notes.get(index);
+        Note noteF = note;
         TextView name = view.findViewById(R.id.noteName);
         TextView date = view.findViewById(R.id.noteDate);
         TextView content = view.findViewById(R.id.noteContent);

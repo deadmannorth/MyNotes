@@ -5,14 +5,14 @@
 
     <!-- Фрагмент с выбором городов -->
     <fragment android:name="ru.aslazarev.mynotes.NotesListFragment"
-        android:id="@+id/cities"
+        android:id="@+id/notesList"
         android:layout_weight="1"
         android:layout_width="0px"
         android:layout_height="match_parent" />
 
     <!-- Здесь будет герб выбранного города -->
     <FrameLayout
-        android:id="@+id/coat_of_arms"
+        android:id="@+id/land_note_content"
         android:layout_width="0px"
         android:layout_height="match_parent"
         android:layout_weight="1"
