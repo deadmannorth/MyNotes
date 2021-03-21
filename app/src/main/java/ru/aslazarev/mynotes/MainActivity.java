@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    public ArrayList<Note> notes = new ArrayList<>();
+    public static final ArrayList<Note> notes = new ArrayList<>();
     {
         notes.add(new Note("Толстой", "Пообщаться с Антоном по системе лояльности", new Date()));
         notes.add(new Note("Матрешка", "Пообщаться с Светланой по акцизам", new Date()));
