@@ -103,7 +103,7 @@ public class NotesListFragment extends Fragment {
         fragmentTransaction.replace(R.id.land_note_content, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
-
+//
     }
 
 
