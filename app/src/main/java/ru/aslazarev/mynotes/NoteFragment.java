@@ -11,11 +11,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NoteFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class NoteFragment extends Fragment {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
