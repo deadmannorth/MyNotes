@@ -100,7 +100,8 @@ public class NotesListFragment extends Fragment {
         NoteFragment fragment = NoteFragment.newInstance(currentNote);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.land_note_content, fragment);
+        //касяк переделывай
+        fragmentTransaction.replace(R.id.noteContent, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }

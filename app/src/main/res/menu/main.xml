@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_favorite"
         android:icon="@android:drawable/star_off"
-        android:orderInCategory="10"
+        android:orderInCategory="7"
         android:title="favorite"
         app:showAsAction="always" />
     <item
