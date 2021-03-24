@@ -65,8 +65,20 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        addFragment(NotesListFragment.newInstance());
     }
 
+    private void addFragment(Fragment fragment) {
+        //Получить менеджер фрагментов
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        // Открыть транзакцию
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        // Закрыть транзакцию
+        fragmentTransaction.commit();
+    }
 
 
 

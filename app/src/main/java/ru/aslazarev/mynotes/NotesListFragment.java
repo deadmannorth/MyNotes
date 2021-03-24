@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+import ru.aslazarev.mynotes.ui.NoteAdapter;
 
 import static ru.aslazarev.mynotes.MainActivity.notes;
 
@@ -28,6 +33,14 @@ public class NotesListFragment extends Fragment {
     private boolean isLandscape;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
 
+    public static NotesListFragment newInstance() {
+        NotesListFragment fragment = new NotesListFragment();
+        /*Bundle args = new Bundle();
+        args.putParcelable(ARG_INDEX, note);
+        fragment.setArguments(args);*/
+        return fragment;
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState){
         outState.putParcelable(CURRENT_NOTE, currentNote);
@@ -37,9 +50,25 @@ public class NotesListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notes_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_lines);
+
+        return view;
     }
 
+    private void initRecyclerView(RecyclerView recyclerView, ArrayList<Note> data){
+
+        // Эта установка служит для повышения производительности системы
+        recyclerView.setHasFixedSize(true);
+        // Будем работать со встроенным менеджером
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        // Установим адаптер
+        NoteAdapter adapter = new NoteAdapter(data);
+        recyclerView.setAdapter(adapter);
+    }
+
+    /*
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -114,4 +143,4 @@ public class NotesListFragment extends Fragment {
         startActivity(intent);
     }
 
-}
+*/}
