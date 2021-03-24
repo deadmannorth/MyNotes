@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -27,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static final ArrayList<Note> notes = new ArrayList<>();
     {
         notes.add(new Note("Толстой", "Пообщаться с Антоном по системе лояльности", new Date()));
-        notes.add(new Note("Матрешка", "Пообщаться с Светланой по акцизам", new Date()));
+        notes.add(new Note("Матрешка", "Пообщаться со Светланой по акцизам", new Date()));
         notes.add(new Note("Легенда", "Заехать на открытие", new Date()));
         notes.add(new Note("Опера", "Новые проксимити считыватели", new Date()));
         notes.add(new Note("Акварелла", "Пообщаться по вопросу интеграции мобильного приложения с системами лояльности", new Date()));
@@ -63,11 +66,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
+
+
+
+
+    //шаблон
     private boolean navigateFragment(int id) {
         return false;
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
