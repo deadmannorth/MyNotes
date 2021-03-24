@@ -17,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -74,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
     //шаблон
     private boolean navigateFragment(int id) {
-        return false;
+
+        return true;
     }
 
     @Override
