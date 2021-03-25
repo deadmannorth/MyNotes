@@ -21,11 +21,8 @@ public class NoteFragmentActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
-            // Если эта activity запускается первый раз (с каждым новым гербом первый раз),
-            // то перенаправим параметр фрагменту
             NoteFragment details = new NoteFragment();
             details.setArguments(getIntent().getExtras());
-            // Добавим фрагмент на activity
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, details).commit();

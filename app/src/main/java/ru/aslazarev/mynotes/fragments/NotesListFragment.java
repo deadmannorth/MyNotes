@@ -22,6 +22,8 @@ import static ru.aslazarev.mynotes.MainActivity.notes;
 
 public class NotesListFragment extends Fragment {
 
+    public static RecyclerView recyclerView;
+    public static ViewHolderAdapter vha;
     public static final String CURRENT_NOTE = "current.note";
     private Note currentNote;
 
@@ -37,67 +39,20 @@ public class NotesListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_notes_list, container, false);
+        recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_notes_list, container, false);
         recyclerView.setHasFixedSize(true);
         DividerItemDecoration decoration = new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL);
         decoration.setDrawable(getResources().getDrawable(R.drawable.docoration));
         recyclerView.addItemDecoration(decoration);
         LinearLayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        ViewHolderAdapter vha = new ViewHolderAdapter(inflater, notes);
+        vha = new ViewHolderAdapter(this, inflater, notes);
         vha.setOnClickListener(note -> {
             showFragment(note);
         });
         recyclerView.setAdapter(vha);
         return recyclerView;
     }
-
-    /*private class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
-        private final LayoutInflater mInflater;
-        private final ArrayList<Note> mNotes;
-
-        public ViewHolderAdapter(LayoutInflater inflater, ArrayList<Note> notes) {
-            this.mInflater = inflater;
-            this.mNotes = notes;
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = mInflater.inflate(R.layout.list_item, (ViewGroup) parent, false);
-            return new ViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
-                Note mNote = mNotes.get(position);
-                holder.name.setText(mNote.getNoteName());
-                holder.date.setText(dateFormat.format(mNote.getCreateDate()));
-                holder.item.setOnClickListener(v -> {
-                showFragment(mNote);
-                });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mNotes.size();
-        }
-    }*/
-
-    /*private static class ViewHolder extends RecyclerView.ViewHolder {
-
-        final TextView name;
-        final TextView date;
-        final LinearLayout item;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            name = itemView.findViewById(R.id.r_name_note);
-            date = itemView.findViewById(R.id.r_date_note);
-            item = itemView.findViewById(R.id.r_item);
-        }
-    }*/
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

@@ -7,17 +7,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.ui.AppBarConfiguration;
-
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import com.google.android.material.navigation.NavigationView;
+import android.view.View;
 
+import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.Date;
 
 import ru.aslazarev.mynotes.data.Note;
-
+import static ru.aslazarev.mynotes.fragments.NotesListFragment.vha;
+import static ru.aslazarev.mynotes.fragments.NotesListFragment.recyclerView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -81,5 +84,27 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        if (item.getItemId() == R.id.add_note) {
+                notes.add(0, new Note("Занзибар", "Подготовить летник", new Date()));
+                vha.notifyDataSetChanged();
+                recyclerView.scrollToPosition(0);
+        } else if (item.getItemId() == R.id.action_search){
 
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.context_menu, menu);
+    }
+
+    public boolean onContextItemSelected(@NonNull MenuItem item){
+        return super.onContextItemSelected(item);
+    }
 }
