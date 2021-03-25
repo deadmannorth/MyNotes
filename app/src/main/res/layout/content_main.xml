@@ -6,7 +6,7 @@
 
         <fragment
             android:id="@+id/fragment_list_layout"
-            android:name="ru.aslazarev.mynotes.NotesListFragment"
+            android:name="ru.aslazarev.mynotes.fragments.NotesListFragment"
             android:layout_width="match_parent"
             app:defaultNavHost="true"
             android:layout_height="match_parent" />

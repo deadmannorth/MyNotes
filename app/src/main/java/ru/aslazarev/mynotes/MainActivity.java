@@ -16,6 +16,8 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ru.aslazarev.mynotes.data.Note;
+
 
 public class MainActivity extends AppCompatActivity {
 

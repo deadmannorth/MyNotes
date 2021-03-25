@@ -1,4 +1,4 @@
-package ru.aslazarev.mynotes;
+package ru.aslazarev.mynotes.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

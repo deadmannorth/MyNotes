@@ -1,4 +1,4 @@
-package ru.aslazarev.mynotes;
+package ru.aslazarev.mynotes.fragments;
 
 import android.os.Bundle;
 
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+
+import ru.aslazarev.mynotes.R;
+import ru.aslazarev.mynotes.data.Note;
 
 
 public class NoteFragment extends Fragment {

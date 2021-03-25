@@ -1,9 +1,8 @@
-package ru.aslazarev.mynotes;
+package ru.aslazarev.mynotes.fragments;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -11,15 +10,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import ru.aslazarev.mynotes.NoteFragmentActivity;
+import ru.aslazarev.mynotes.R;
+import ru.aslazarev.mynotes.data.Note;
+import ru.aslazarev.mynotes.ui.ViewHolderAdapter;
 
 import static ru.aslazarev.mynotes.MainActivity.notes;
 
@@ -47,11 +44,15 @@ public class NotesListFragment extends Fragment {
         recyclerView.addItemDecoration(decoration);
         LinearLayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new ViewHolderAdapter(inflater, notes));
+        ViewHolderAdapter vha = new ViewHolderAdapter(inflater, notes);
+        vha.setOnClickListener(note -> {
+            showFragment(note);
+        });
+        recyclerView.setAdapter(vha);
         return recyclerView;
     }
 
-    private class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
+    /*private class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
         private final LayoutInflater mInflater;
         private final ArrayList<Note> mNotes;
 
@@ -82,9 +83,9 @@ public class NotesListFragment extends Fragment {
         public int getItemCount() {
             return mNotes.size();
         }
-    }
+    }*/
 
-    private static class ViewHolder extends RecyclerView.ViewHolder {
+    /*private static class ViewHolder extends RecyclerView.ViewHolder {
 
         final TextView name;
         final TextView date;
@@ -96,7 +97,7 @@ public class NotesListFragment extends Fragment {
             date = itemView.findViewById(R.id.r_date_note);
             item = itemView.findViewById(R.id.r_item);
         }
-    }
+    }*/
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
