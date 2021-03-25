@@ -21,8 +21,6 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import ru.aslazarev.mynotes.ui.NoteAdapter;
-
 import static ru.aslazarev.mynotes.MainActivity.notes;
 
 public class NotesListFragment extends Fragment {
@@ -31,15 +29,7 @@ public class NotesListFragment extends Fragment {
     private Note currentNote;
 
     private boolean isLandscape;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
 
-    public static NotesListFragment newInstance() {
-        NotesListFragment fragment = new NotesListFragment();
-        /*Bundle args = new Bundle();
-        args.putParcelable(ARG_INDEX, note);
-        fragment.setArguments(args);*/
-        return fragment;
-    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState){
@@ -50,53 +40,59 @@ public class NotesListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_lines);
-
-        return view;
-    }
-
-    private void initRecyclerView(RecyclerView recyclerView, ArrayList<Note> data){
-
-        // Эта установка служит для повышения производительности системы
+        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_notes_list, container, false);
         recyclerView.setHasFixedSize(true);
-        // Будем работать со встроенным менеджером
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        // Установим адаптер
-        NoteAdapter adapter = new NoteAdapter(data);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(new ViewHolderAdapter(inflater, notes));
+        return recyclerView;
     }
 
-    /*
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initNoteList(view);
-    }
+    private class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
+        private final LayoutInflater mInflater;
+        private final ArrayList<Note> mNotes;
 
-    private void initNoteList(View view) {
-        LinearLayout layoutView = (LinearLayout) view;
-        for (int i = 0; i < notes.size(); i++) {
-            Note nextNote = notes.get(i);
-            LinearLayout noteLayout = new LinearLayout(getContext());
-            noteLayout.setOrientation(LinearLayout.HORIZONTAL);
-            TextView noteName = new TextView(getContext());
-            noteName.setText(nextNote.getNoteName() + "     ");
-            noteName.setTextSize(30);
-            noteLayout.addView(noteName);
-            TextView noteDate = new TextView(getContext());
-            noteDate.setText(dateFormat.format(nextNote.getCreateDate()).toString());
-            noteDate.setTextSize(30);
-            noteLayout.addView(noteDate);
-            final int index = i;
-            noteLayout.setOnClickListener(v -> {
-                currentNote = notes.get(index);
-                showFragment(currentNote);
-            });
-            layoutView.addView(noteLayout);
+        public ViewHolderAdapter(LayoutInflater inflater, ArrayList<Note> notes) {
+            this.mInflater = inflater;
+            this.mNotes = notes;
         }
 
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = mInflater.inflate(R.layout.list_item, (ViewGroup) parent, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
+                Note mNote = mNotes.get(position);
+                holder.name.setText(mNote.getNoteName());
+                holder.date.setText(dateFormat.format(mNote.getCreateDate()));
+                holder.item.setOnClickListener(v -> {
+                showFragment(mNote);
+                });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mNotes.size();
+        }
+    }
+
+    private static class ViewHolder extends RecyclerView.ViewHolder {
+
+        final TextView name;
+        final TextView date;
+        final LinearLayout item;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.r_name_note);
+            date = itemView.findViewById(R.id.r_date_note);
+            item = itemView.findViewById(R.id.r_item);
+        }
     }
 
     @Override
@@ -143,4 +139,4 @@ public class NotesListFragment extends Fragment {
         startActivity(intent);
     }
 
-*/}
+}

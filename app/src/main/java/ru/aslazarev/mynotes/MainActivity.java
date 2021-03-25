@@ -13,6 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,18 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        addFragment(NotesListFragment.newInstance());
-    }
 
-    private void addFragment(Fragment fragment) {
-        //Получить менеджер фрагментов
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        // Открыть транзакцию
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        // Закрыть транзакцию
-        fragmentTransaction.commit();
     }
 
 
