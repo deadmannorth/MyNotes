@@ -19,9 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Date;
-
-import ru.aslazarev.mynotes.NoteFragmentActivity;
 import ru.aslazarev.mynotes.R;
 import ru.aslazarev.mynotes.data.Note;
 import ru.aslazarev.mynotes.ui.ViewHolderAdapter;
