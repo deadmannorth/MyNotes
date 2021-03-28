@@ -42,13 +42,13 @@ public class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder>{
         Note mNote = mNotes.get(position);
         holder.name.setText(mNote.getNoteName());
         holder.date.setText(dateFormat.format(mNote.getCreateDate()));
-        holder.item.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
             if (mOnClickListener != null) {
                 mOnClickListener.onItemClick(mNote);
             }
-            //showFragment(mNote);
         });
-        mFragment.registerForContextMenu(holder.item);
+        holder.lastPosition(mFragment);
+        mFragment.registerForContextMenu(holder.itemView);
     }
 
     @Override

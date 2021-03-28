@@ -24,18 +24,6 @@ public class Note implements Parcelable {
         this.createDate = createDate;
     }
 
-    public void setNoteName(String noteName) {
-        this.noteName = noteName;
-    }
-
-    public void setNoteContent(String noteContent) {
-        this.noteContent = noteContent;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
     protected Note(Parcel in) {
         noteName = in.readString();
         noteContent = in.readString();
@@ -68,6 +56,18 @@ public class Note implements Parcelable {
 
     public Date getCreateDate() {
         return createDate;
+    }
+
+    public void setNoteName(String noteName) {
+        this.noteName = noteName;
+    }
+
+    public void setNoteContent(String noteContent) {
+        this.noteContent = noteContent;
+    }
+
+    public void setDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     @Override

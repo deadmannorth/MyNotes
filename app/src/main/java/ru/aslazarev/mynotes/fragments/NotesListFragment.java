@@ -7,12 +7,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.Date;
+
 import ru.aslazarev.mynotes.NoteFragmentActivity;
 import ru.aslazarev.mynotes.R;
 import ru.aslazarev.mynotes.data.Note;
@@ -26,9 +34,8 @@ public class NotesListFragment extends Fragment {
     public static ViewHolderAdapter vha;
     public static final String CURRENT_NOTE = "current.note";
     private Note currentNote;
-
     private boolean isLandscape;
-
+    private int mLastSelectedPosition = -1;
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState){
@@ -44,6 +51,10 @@ public class NotesListFragment extends Fragment {
         DividerItemDecoration decoration = new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL);
         decoration.setDrawable(getResources().getDrawable(R.drawable.docoration));
         recyclerView.addItemDecoration(decoration);
+        DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
+        itemAnimator.setAddDuration(1000);
+        itemAnimator.setRemoveDuration(1000);
+        recyclerView.setItemAnimator(itemAnimator);
         LinearLayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(layoutManager);
         vha = new ViewHolderAdapter(this, inflater, notes);
@@ -67,8 +78,6 @@ public class NotesListFragment extends Fragment {
         if (isLandscape) {
             showNoteFragmentLand(currentNote);
         }
-
-
     }
 
     private void showFragment(Note note) {
@@ -77,11 +86,10 @@ public class NotesListFragment extends Fragment {
         } else {
             showNoteFragment(note);
         }
-
     }
 
     private void showNoteFragmentLand(Note note) {
-        NoteFragment fragment = NoteFragment.newInstance(currentNote);
+        NoteFragment fragment = NoteFragment.newInstance(note);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.land_note_content, fragment);
@@ -89,13 +97,44 @@ public class NotesListFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-
-
     private void showNoteFragment(Note note) {
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), NoteFragmentActivity.class);
-        intent.putExtra(NoteFragment.ARG_INDEX, currentNote);
-        startActivity(intent);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_list_layout, NoteFragment.newInstance(currentNote));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void setLastSelectedPosition(int i){
+        mLastSelectedPosition = i;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = requireActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.context_menu, menu);
+    }
+
+    public boolean onContextItemSelected(@NonNull MenuItem item){
+        if (item.getItemId() == R.id.edit_note_context_menu){
+            if (mLastSelectedPosition != -1) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_list_layout, NoteEditorFragment.newInstance(currentNote));
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        } else if (item.getItemId() == R.id.remove__note_context_menu){
+            if (mLastSelectedPosition != -1) {
+                notes.remove(mLastSelectedPosition);
+                vha.notifyItemRemoved(mLastSelectedPosition);
+            }
+        }
+        else {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
 }
