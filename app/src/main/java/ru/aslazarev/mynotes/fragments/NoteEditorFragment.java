@@ -63,7 +63,7 @@ public class NoteEditorFragment extends Fragment {
         MaterialButton saveNote = view.findViewById(R.id.save_new_note);
         if (note.getNoteName() != null){
             editName.setText(note.getNoteName());
-            editDate.setText(note.getCreateDate().toString());
+            editDate.setText(dateFormat.format(note.getCreateDate()));
             editContent.setText(note.getNoteContent());
         }
         editDate.setOnClickListener(v -> {

@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,7 +27,8 @@ import static ru.aslazarev.mynotes.fragments.NotesListFragment.recyclerView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     public static final ArrayList<Note> notes = new ArrayList<>();
     {
