@@ -113,7 +113,9 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 notes.add(0, currentNote);
-                notesCollection.add(currentNote.getFields());
+                notesCollection.add(currentNote.getFields()).addOnSuccessListener(documentReference -> {
+                    currentNote.setNoteId(documentReference.getId());
+                });
                 vha.notifyDataSetChanged();
                 recyclerView.scrollToPosition(0);
         } else if (item.getItemId() == R.id.action_search){
