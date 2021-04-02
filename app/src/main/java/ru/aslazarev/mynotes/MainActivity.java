@@ -36,8 +36,8 @@ import static ru.aslazarev.mynotes.fragments.NotesListFragment.recyclerView;
 public class MainActivity extends AppCompatActivity {
 
     private static final String COLLECTION_NOTES = "as.lazarev.CollectionNotes";
-    FirebaseFirestore notesStore = FirebaseFirestore.getInstance();
-    CollectionReference notesCollection = notesStore.collection(COLLECTION_NOTES);
+    private static FirebaseFirestore notesStore = FirebaseFirestore.getInstance();
+    public static final CollectionReference notesCollection = notesStore.collection(COLLECTION_NOTES);
 
 
 
@@ -113,9 +113,6 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 notes.add(0, currentNote);
-                notesCollection.add(currentNote.getFields()).addOnSuccessListener(documentReference -> {
-                    currentNote.setNoteId(documentReference.getId());
-                });
                 vha.notifyDataSetChanged();
                 recyclerView.scrollToPosition(0);
         } else if (item.getItemId() == R.id.action_search){

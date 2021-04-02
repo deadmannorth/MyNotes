@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.model.Document;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,6 +21,7 @@ import java.util.Date;
 
 import ru.aslazarev.mynotes.R;
 import ru.aslazarev.mynotes.data.Note;
+import static ru.aslazarev.mynotes.MainActivity.notesCollection;
 
 
 public class NoteEditorFragment extends Fragment {
@@ -74,6 +76,13 @@ public class NoteEditorFragment extends Fragment {
                 note.setNoteName(editName.getText().toString());
                 note.setDate(new Date(dateAndTime.getTimeInMillis()));
                 note.setNoteContent(editContent.getText().toString());
+                if(note.getNoteId() == null) {
+                    notesCollection.add(note.getFields()).addOnSuccessListener(documentReference -> {
+                        note.setNoteId(documentReference.getId());
+                    });
+                } else {
+                    notesCollection.document(note.getNoteId()).update(note.getFields());
+                }
                 getFragmentManager().popBackStack();
         });
         return view;
