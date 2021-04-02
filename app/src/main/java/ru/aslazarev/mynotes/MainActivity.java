@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
             for(QueryDocumentSnapshot document : task.getResult()) {
                 notes.add(new Note(document.getId(), document.getData()));
             }
+            notes.size();
         }
+        vha.notifyDataSetChanged();
     }
 
     private void onFetchFailed(Exception e){
