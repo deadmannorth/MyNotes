@@ -3,6 +3,7 @@ package ru.aslazarev.mynotes.fragments;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import ru.aslazarev.mynotes.R;
 import ru.aslazarev.mynotes.data.Note;
@@ -127,9 +129,22 @@ public class NotesListFragment extends Fragment {
             }
         } else if (item.getItemId() == R.id.remove__note_context_menu){
             if (mLastSelectedPosition != -1) {
-                notesCollection.document(notes.get(mLastSelectedPosition).getNoteId()).delete();
-                notes.remove(mLastSelectedPosition);
-                vha.notifyItemRemoved(mLastSelectedPosition);
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(requireActivity()).
+                                setTitle("delete note").
+                                setMessage("A you sure ?").
+                                setIcon(R.drawable.delete_icon).
+                                setCancelable(true).
+                                setPositiveButton("Yes", (dialog, which) -> {
+                                    notesCollection.document(notes.get(mLastSelectedPosition).getNoteId()).delete();
+                                    notes.remove(mLastSelectedPosition);
+                                    vha.notifyItemRemoved(mLastSelectedPosition);
+                                }).
+                                setNegativeButton("No", (dialog, which) -> {
+                                    return;
+                                });
+                builder.show();
+
             }
         }
         else {
