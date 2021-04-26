@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 public class NoteFragmentActivity extends AppCompatActivity {
-
+    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -5,10 +5,12 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import static ru.aslazarev.mynotes.MainActivity.notes;
 
@@ -26,7 +29,7 @@ public class NotesListFragment extends Fragment {
     private Note currentNote;
 
     private boolean isLandscape;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState){
@@ -37,37 +40,62 @@ public class NotesListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notes_list, container, false);
+        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_notes_list, container, false);
+        recyclerView.setHasFixedSize(true);
+        DividerItemDecoration decoration = new DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL);
+        decoration.setDrawable(getResources().getDrawable(R.drawable.docoration));
+        recyclerView.addItemDecoration(decoration);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new ViewHolderAdapter(inflater, notes));
+        return recyclerView;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initNoteList(view);
-    }
+    private class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
+        private final LayoutInflater mInflater;
+        private final ArrayList<Note> mNotes;
 
-    private void initNoteList(View view) {
-        LinearLayout layoutView = (LinearLayout) view;
-        for (int i = 0; i < notes.size(); i++) {
-            Note nextNote = notes.get(i);
-            LinearLayout noteLayout = new LinearLayout(getContext());
-            noteLayout.setOrientation(LinearLayout.HORIZONTAL);
-            TextView noteName = new TextView(getContext());
-            noteName.setText(nextNote.getNoteName() + "     ");
-            noteName.setTextSize(30);
-            noteLayout.addView(noteName);
-            TextView noteDate = new TextView(getContext());
-            noteDate.setText(dateFormat.format(nextNote.getCreateDate()).toString());
-            noteDate.setTextSize(30);
-            noteLayout.addView(noteDate);
-            final int index = i;
-            noteLayout.setOnClickListener(v -> {
-                currentNote = notes.get(index);
-                showFragment(currentNote);
-            });
-            layoutView.addView(noteLayout);
+        public ViewHolderAdapter(LayoutInflater inflater, ArrayList<Note> notes) {
+            this.mInflater = inflater;
+            this.mNotes = notes;
         }
 
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = mInflater.inflate(R.layout.list_item, (ViewGroup) parent, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
+                Note mNote = mNotes.get(position);
+                holder.name.setText(mNote.getNoteName());
+                holder.date.setText(dateFormat.format(mNote.getCreateDate()));
+                holder.item.setOnClickListener(v -> {
+                showFragment(mNote);
+                });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mNotes.size();
+        }
+    }
+
+    private static class ViewHolder extends RecyclerView.ViewHolder {
+
+        final TextView name;
+        final TextView date;
+        final LinearLayout item;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.r_name_note);
+            date = itemView.findViewById(R.id.r_date_note);
+            item = itemView.findViewById(R.id.r_item);
+        }
     }
 
     @Override
