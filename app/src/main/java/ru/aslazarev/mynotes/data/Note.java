@@ -5,11 +5,21 @@ import android.os.Parcelable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Note implements Parcelable {
 
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_CONTENT = "content";
+    public static final String FIELD_DATE = "date";
+
+
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
+    private String noteId;
     private String noteName;
     private String noteContent;
     private Date createDate;
@@ -24,7 +34,24 @@ public class Note implements Parcelable {
         this.createDate = createDate;
     }
 
+    public Note(String id, String noteName, String noteContent, Date createDate) {
+        this(noteName, noteContent, createDate);
+        this.noteId = id;
+    }
+
+    public Note(String id, Map<String, Object> fields){
+        this.noteId = id;
+        this.noteName = (String) fields.get(FIELD_NAME);
+        this.noteContent = (String) fields.get(FIELD_CONTENT);
+        try {
+            this.createDate = dateFormat.parse((String) fields.get(FIELD_DATE));
+        } catch (ParseException e) {
+            this.createDate = new Date();
+        }
+    }
+
     protected Note(Parcel in) {
+        noteId = in.readString();
         noteName = in.readString();
         noteContent = in.readString();
         try {
@@ -32,6 +59,14 @@ public class Note implements Parcelable {
         } catch (ParseException e) {
             createDate = new Date();
         }
+    }
+
+    public final Map<String, Object> getFields(){
+        HashMap<String, Object> fields = new HashMap<>();
+        fields.put(FIELD_NAME, getNoteName());
+        fields.put(FIELD_CONTENT, getNoteContent());
+        fields.put(FIELD_DATE, dateFormat.format(getCreateDate()).toString());
+        return Collections.unmodifiableMap(fields);
     }
 
     public static final Creator<Note> CREATOR = new Creator<Note>() {
@@ -56,6 +91,14 @@ public class Note implements Parcelable {
 
     public Date getCreateDate() {
         return createDate;
+    }
+
+    public String getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(String noteId) {
+        this.noteId = noteId;
     }
 
     public void setNoteName(String noteName) {

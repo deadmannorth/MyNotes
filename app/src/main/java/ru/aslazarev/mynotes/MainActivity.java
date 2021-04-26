@@ -9,10 +9,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,22 +35,40 @@ import static ru.aslazarev.mynotes.fragments.NotesListFragment.recyclerView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
+    private static final String COLLECTION_NOTES = "as.lazarev.CollectionNotes";
+    private static FirebaseFirestore notesStore = FirebaseFirestore.getInstance();
+    public static final CollectionReference notesCollection = notesStore.collection(COLLECTION_NOTES);
+
+
 
     public static final ArrayList<Note> notes = new ArrayList<>();
-    {
+   /* {
         notes.add(new Note("Толстой", "Пообщаться с Антоном по системе лояльности", new Date()));
         notes.add(new Note("Матрешка", "Пообщаться со Светланой по акцизам", new Date()));
         notes.add(new Note("Легенда", "Заехать на открытие", new Date()));
         notes.add(new Note("Опера", "Новые проксимити считыватели", new Date()));
         notes.add(new Note("Акварелла", "Пообщаться по вопросу интеграции мобильного приложения с системами лояльности", new Date()));
+    }*/
+
+    private void onFetchComplete(Task<QuerySnapshot> task){
+        notes.clear();
+        if(task.isSuccessful()){
+            for(QueryDocumentSnapshot document : task.getResult()) {
+                notes.add(new Note(document.getId(), document.getData()));
+            }
+            notes.size();
+        }
+        vha.notifyDataSetChanged();
     }
 
-
+    private void onFetchFailed(Exception e){
+        Log.e("Failed", "Fetch failed", e);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        notesCollection.orderBy("date", Query.Direction.DESCENDING).get().addOnCompleteListener(this::onFetchComplete).addOnFailureListener(this::onFetchFailed);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -1,6 +1,5 @@
 package ru.aslazarev.mynotes.fragments;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -24,6 +23,7 @@ import ru.aslazarev.mynotes.data.Note;
 import ru.aslazarev.mynotes.ui.ViewHolderAdapter;
 
 import static ru.aslazarev.mynotes.MainActivity.notes;
+import static ru.aslazarev.mynotes.MainActivity.notesCollection;
 
 public class NotesListFragment extends Fragment {
 
@@ -70,7 +70,9 @@ public class NotesListFragment extends Fragment {
         if(savedInstanceState != null){
             currentNote = savedInstanceState.getParcelable(CURRENT_NOTE);
         } else {
-            currentNote = notes.get(0);
+            if (notes.size() != 0) {
+                currentNote = notes.get(0);
+            }
         }
         if (isLandscape) {
             showNoteFragmentLand(currentNote);
@@ -116,6 +118,7 @@ public class NotesListFragment extends Fragment {
     public boolean onContextItemSelected(@NonNull MenuItem item){
         if (item.getItemId() == R.id.edit_note_context_menu){
             if (mLastSelectedPosition != -1) {
+                currentNote = notes.get(mLastSelectedPosition);
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_list_layout, NoteEditorFragment.newInstance(currentNote));
@@ -124,6 +127,7 @@ public class NotesListFragment extends Fragment {
             }
         } else if (item.getItemId() == R.id.remove__note_context_menu){
             if (mLastSelectedPosition != -1) {
+                notesCollection.document(notes.get(mLastSelectedPosition).getNoteId()).delete();
                 notes.remove(mLastSelectedPosition);
                 vha.notifyItemRemoved(mLastSelectedPosition);
             }
