@@ -1,4 +1,4 @@
-package ru.aslazarev.mynotes;
+package ru.aslazarev.mynotes.fragments;
 
 import android.os.Bundle;
 
@@ -11,17 +11,20 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
+import ru.aslazarev.mynotes.R;
+import ru.aslazarev.mynotes.data.Note;
+
 
 public class NoteFragment extends Fragment {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
-    public static final String ARG_INDEX = "note";
+    public static final String ARG_ITEM_NOTE = "note";
     private Note note;
 
     public static NoteFragment newInstance(Note note) {
         NoteFragment fragment = new NoteFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_INDEX, note);
+        args.putParcelable(ARG_ITEM_NOTE, note);
         fragment.setArguments(args);
         return fragment;
     }
@@ -30,7 +33,7 @@ public class NoteFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            note = getArguments().getParcelable(ARG_INDEX);
+            note = getArguments().getParcelable(ARG_ITEM_NOTE);
         }
     }
 

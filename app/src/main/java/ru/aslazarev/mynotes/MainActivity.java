@@ -4,18 +4,24 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
-
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.google.android.material.navigation.NavigationView;
 
+import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ru.aslazarev.mynotes.data.Note;
+import ru.aslazarev.mynotes.fragments.NoteEditorFragment;
+import ru.aslazarev.mynotes.fragments.NotesListFragment;
+
+import static ru.aslazarev.mynotes.fragments.NotesListFragment.vha;
+import static ru.aslazarev.mynotes.fragments.NotesListFragment.recyclerView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,27 +56,19 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (navigateFragment(id)){
-                    drawer.closeDrawer(GravityCompat.START);
-                    return true;
-                }
+
                 return false;
             }
         });
 
+        if(savedInstanceState == null){
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragment_list_layout, new NotesListFragment());
+            transaction.commit();
+        }
 
-    }
 
-
-
-
-
-
-    //шаблон
-    private boolean navigateFragment(int id) {
-
-        return true;
     }
 
     @Override
@@ -79,5 +77,23 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        if (item.getItemId() == R.id.add_note) {
+                Note currentNote = new Note();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_list_layout, NoteEditorFragment.newInstance(currentNote));
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                notes.add(0, currentNote);
+                vha.notifyDataSetChanged();
+                recyclerView.scrollToPosition(0);
+        } else if (item.getItemId() == R.id.action_search){
 
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 }

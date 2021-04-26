@@ -1,4 +1,4 @@
-package ru.aslazarev.mynotes;
+package ru.aslazarev.mynotes.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,6 +13,10 @@ public class Note implements Parcelable {
     private String noteName;
     private String noteContent;
     private Date createDate;
+
+    public Note(){
+
+    }
 
     public Note(String noteName, String noteContent, Date createDate) {
         this.noteName = noteName;
@@ -52,6 +56,18 @@ public class Note implements Parcelable {
 
     public Date getCreateDate() {
         return createDate;
+    }
+
+    public void setNoteName(String noteName) {
+        this.noteName = noteName;
+    }
+
+    public void setNoteContent(String noteContent) {
+        this.noteContent = noteContent;
+    }
+
+    public void setDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     @Override
